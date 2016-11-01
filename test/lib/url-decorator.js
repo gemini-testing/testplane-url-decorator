@@ -42,7 +42,14 @@ describe('url-decorator', () => {
         it('should update suite url', () => {
             const suite = {url: '/?text=text'};
 
-            urlDecorator.decorateGeminiUrl({suite}, {query: {foo: {value: 'bar'}}});
+            urlDecorator.decorateGeminiUrl({suite}, {
+                query: {
+                    foo: {
+                        value: 'bar',
+                        enabled: _.wrap(true)
+                    }
+                }
+            });
 
             assert.equal(suite.url, '/?text=text&foo=bar');
         });
@@ -64,7 +71,14 @@ describe('url-decorator', () => {
             const browser = mkBrowser();
             const baseUrlFn = browser.url;
 
-            urlDecorator.decorateHermioneUrl(browser, {query: {foo: {value: 'bar'}}});
+            urlDecorator.decorateHermioneUrl(browser, {
+                query: {
+                    foo: {
+                        value: 'bar',
+                        enabled: _.wrap(true)
+                    }
+                }
+            });
             browser.url('/?text=text');
 
             assert.calledOn(baseUrlFn, browser);

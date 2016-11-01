@@ -34,7 +34,9 @@ describe('config', () => {
             'GEMINI_URL_QUERY_FOO': 'bar'
         };
 
-        assert.deepEqual(configInit('gemini', {}, envVars), {query: {foo: {value: 'bar'}}});
+        const result = configInit('gemini', {}, envVars);
+
+        assert.deepPropertyVal(result, 'query.foo.value', 'bar');
     });
 
     it('should override values from config by values from environment variables', () => {
@@ -50,7 +52,9 @@ describe('config', () => {
             'GEMINI_URL_QUERY_TEXT': 'fromEnv'
         };
 
-        assert.deepEqual(configInit('gemini', configUrl, envVars), {query: {text: {value: 'fromEnv'}}});
+        const result = configInit('gemini', configUrl, envVars);
+
+        assert.deepPropertyVal(result, 'query.text.value', 'fromEnv');
     });
 
     it('should merge values from config and from environment variables', () => {
@@ -66,9 +70,10 @@ describe('config', () => {
             'GEMINI_URL_QUERY_TEXT': 'hello'
         };
 
-        assert.deepEqual(configInit('gemini', configUrl, envVars), {
-            query: {name: {value: 'gemini'}, text: {value: 'hello'}}
-        });
+        const result = configInit('gemini', configUrl, envVars);
+
+        assert.deepPropertyVal(result, 'query.name.value', 'gemini');
+        assert.deepPropertyVal(result, 'query.text.value', 'hello');
     });
 
     it('should use `concat` value from config if environment variables have the same url parameter', () => {
@@ -84,14 +89,10 @@ describe('config', () => {
             'GEMINI_URL_QUERY_TEXT': 'fromEnv'
         };
 
-        assert.deepEqual(configInit('gemini', configUrl, envVars), {
-            query: {
-                text: {
-                    value: 'fromEnv',
-                    concat: false
-                }
-            }
-        });
+        const result = configInit('gemini', configUrl, envVars);
+
+        assert.deepPropertyVal(result, 'query.text.value', 'fromEnv');
+        assert.deepPropertyVal(result, 'query.text.concat', false);
     });
 
     describe('parsing url parameters from config file', () => {
@@ -152,15 +153,9 @@ describe('config', () => {
                 'GEMINI_URL_QUERY_PATH_DIR': 'hello/world'
             };
 
-            const expectedResult = {
-                query: {
-                    'path_dir': {
-                        value: 'hello/world'
-                    }
-                }
-            };
+            const result = configInit('gemini', {}, envVars);
 
-            assert.deepEqual(configInit('gemini', {}, envVars), expectedResult);
+            assert.deepPropertyVal(result, 'query.path_dir.value', 'hello/world');
         });
 
         it('should parse several url parameters from environment variables', () => {
@@ -169,18 +164,10 @@ describe('config', () => {
                 'GEMINI_URL_QUERY_HAIR': 'ginger'
             };
 
-            const expectedResult = {
-                query: {
-                    name: {
-                        value: 'qwerty'
-                    },
-                    hair: {
-                        value: 'ginger'
-                    }
-                }
-            };
+            const result = configInit('gemini', {}, envVars);
 
-            assert.deepEqual(configInit('gemini', {}, envVars), expectedResult);
+            assert.deepPropertyVal(result, 'query.name.value', 'qwerty');
+            assert.deepPropertyVal(result, 'query.hair.value', 'ginger');
         });
     });
 });
