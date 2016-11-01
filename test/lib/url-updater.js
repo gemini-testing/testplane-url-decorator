@@ -1,6 +1,6 @@
 'use strict';
 
-const updateUrl = require('../../lib/url-updater');
+const updateUrl = require('../../lib/url-updater').updateUrl;
 
 describe('url-updater', () => {
     const sandbox = sinon.sandbox.create();
