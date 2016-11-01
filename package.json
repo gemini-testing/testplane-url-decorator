@@ -14,6 +14,8 @@
     "test-unit": "mocha test",
     "cover": "istanbul cover _mocha test",
     "coveralls": "npm i coveralls && npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls",
+    "precommit": "npm run lint",
+    "commitmsg": "conventional-changelog-lint -e",
     "release": "standard-version"
   },
   "engines": {
@@ -35,6 +37,7 @@
     "conventional-changelog-lint": "^1.0.1",
     "eslint": "^3.4.0",
     "eslint-config-gemini-testing": "^2.2.0",
+    "husky": "^0.11.9",
     "istanbul": "^0.4.5",
     "mocha": "^3.0.2",
     "proxyquire": "^1.7.10",
