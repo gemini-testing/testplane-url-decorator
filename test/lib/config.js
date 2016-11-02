@@ -170,4 +170,91 @@ describe('config', () => {
             assert.deepPropertyVal(result, 'query.hair.value', 'ginger');
         });
     });
+
+    describe('query field criteria', () => {
+        it('should accept any browser by default', () => {
+            const result = configInit('gemini', {
+                query: {
+                    foo: {
+                        value: 'some-value'
+                    }
+                }
+            }, {});
+
+            assert.equal(result.query.foo.enabled(), true);
+        });
+
+        it('should accept string browser criteria', () => {
+            const result = configInit('gemini', {
+                query: {
+                    foo: {
+                        value: 'some-value',
+                        enabled: 'some-browser'
+                    }
+                }
+            }, {});
+
+            assert.equal(result.query.foo.enabled(['some-browser']), true);
+            assert.equal(result.query.foo.enabled(['another-browser']), false);
+        });
+
+        it('should accept browser criteria given as regular expression', () => {
+            const result = configInit('gemini', {
+                query: {
+                    foo: {
+                        value: 'some-value',
+                        enabled: /some/
+                    }
+                }
+            }, {});
+
+            assert.equal(result.query.foo.enabled(['some-browser']), true);
+            assert.equal(result.query.foo.enabled(['another-browser']), false);
+        });
+
+        it('should accept multiple browser ids', () => {
+            const result = configInit('gemini', {
+                query: {
+                    foo: {
+                        value: 'some-value',
+                        enabled: ['browser1', 'browser2']
+                    }
+                }
+            }, {});
+
+            assert.equal(result.query.foo.enabled(['browser1']), true);
+            assert.equal(result.query.foo.enabled(['browser2']), true);
+            assert.equal(result.query.foo.enabled(['another-browser']), false);
+        });
+
+        it('should accept multiple browser masks', () => {
+            const result = configInit('gemini', {
+                query: {
+                    foo: {
+                        value: 'some-value',
+                        enabled: [/browser1/, /browser2/]
+                    }
+                }
+            }, {});
+
+            assert.equal(result.query.foo.enabled(['browser1']), true);
+            assert.equal(result.query.foo.enabled(['browser2']), true);
+            assert.equal(result.query.foo.enabled(['another-browser']), false);
+        });
+
+        it('should accept browser masks and ids', () => {
+            const result = configInit('gemini', {
+                query: {
+                    foo: {
+                        value: 'some-value',
+                        enabled: ['browser1', /browser2/]
+                    }
+                }
+            }, {});
+
+            assert.equal(result.query.foo.enabled(['browser1']), true);
+            assert.equal(result.query.foo.enabled(['browser2']), true);
+            assert.equal(result.query.foo.enabled(['another-browser']), false);
+        });
+    });
 });
