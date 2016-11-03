@@ -1,5 +1,6 @@
 'use strict';
 
+const _ = require('lodash');
 const configInit = require('../../lib/config').init;
 
 describe('config', () => {
@@ -7,7 +8,7 @@ describe('config', () => {
 
     afterEach(() => sandbox.restore());
 
-    it('should return empty object if config and environments variables are not specified', () => {
+    it('should return empty object if config and environment variables are not specified', () => {
         assert.deepEqual(configInit(), {});
     });
 
@@ -171,100 +172,59 @@ describe('config', () => {
         });
     });
 
-    describe('query field criteria', () => {
-        it('should accept any browser by default', () => {
-            const result = configInit('gemini', {
+    describe('matching query browsers with passed', () => {
+        function mkParam_(opts) {
+            const config = configInit('gemini', {
                 query: {
-                    foo: {
-                        value: 'some-value'
-                    }
+                    foo: _.extend({value: 'some-value'}, opts)
                 }
             }, {});
 
-            assert.equal(result.query.foo.browsers(), true);
+            return config.query.foo;
+        }
+
+        it('should accept any browser by default', () => {
+            const param = mkParam_();
+
+            assert.isTrue(param.isForBrowser('some-browser'));
         });
 
         it('should accept string browser criteria', () => {
-            const result = configInit('gemini', {
-                query: {
-                    foo: {
-                        value: 'some-value',
-                        browsers: 'some-browser'
-                    }
-                }
-            }, {});
+            const param = mkParam_({browsers: 'some-browser'});
 
-            const browsers = result.query.foo.browsers;
-
-            assert.equal(browsers(['some-browser']), true);
-            assert.equal(browsers(['another-browser']), false);
+            assert.isTrue(param.isForBrowser('some-browser'));
+            assert.isFalse(param.isForBrowser('another-browser'));
         });
 
         it('should accept browser criteria given as regular expression', () => {
-            const result = configInit('gemini', {
-                query: {
-                    foo: {
-                        value: 'some-value',
-                        browsers: /some/
-                    }
-                }
-            }, {});
+            const param = mkParam_({browsers: /some/});
 
-            const browsers = result.query.foo.browsers;
-
-            assert.equal(browsers(['some-browser']), true);
-            assert.equal(browsers(['another-browser']), false);
+            assert.isTrue(param.isForBrowser('some-browser'));
+            assert.isFalse(param.isForBrowser('another-browser'));
         });
 
         it('should accept multiple browser ids', () => {
-            const result = configInit('gemini', {
-                query: {
-                    foo: {
-                        value: 'some-value',
-                        browsers: ['browser1', 'browser2']
-                    }
-                }
-            }, {});
+            const param = mkParam_({browsers: ['browser1', 'browser2']});
 
-            const browsers = result.query.foo.browsers;
-
-            assert.equal(browsers(['browser1']), true);
-            assert.equal(browsers(['browser2']), true);
-            assert.equal(browsers(['another-browser']), false);
+            assert.isTrue(param.isForBrowser('browser1'));
+            assert.isTrue(param.isForBrowser('browser2'));
+            assert.isFalse(param.isForBrowser('another-browser'));
         });
 
         it('should accept multiple browser masks', () => {
-            const result = configInit('gemini', {
-                query: {
-                    foo: {
-                        value: 'some-value',
-                        browsers: [/browser1/, /browser2/]
-                    }
-                }
-            }, {});
+            const param = mkParam_({browsers: [/browser1/, /browser2/]});
 
-            const browsers = result.query.foo.browsers;
-
-            assert.equal(browsers(['browser1']), true);
-            assert.equal(browsers(['browser2']), true);
-            assert.equal(browsers(['another-browser']), false);
+            assert.isTrue(param.isForBrowser('browser1'));
+            assert.isTrue(param.isForBrowser('browser2'));
+            assert.isFalse(param.isForBrowser('another-browser'));
         });
 
         it('should accept browser masks and ids', () => {
-            const result = configInit('gemini', {
-                query: {
-                    foo: {
-                        value: 'some-value',
-                        browsers: ['browser1', /browser2/]
-                    }
-                }
-            }, {});
+            const param = mkParam_({browsers: ['browser1', /browser2/]});
 
-            const browsers = result.query.foo.browsers;
-
-            assert.equal(browsers(['browser1']), true);
-            assert.equal(browsers(['browser2']), true);
-            assert.equal(browsers(['another-browser']), false);
+            assert.isTrue(param.isForBrowser('browser1'));
+            assert.isTrue(param.isForBrowser('browser2'));
+            assert.isFalse(param.isForBrowser('another-browser'));
         });
     });
 });

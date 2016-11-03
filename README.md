@@ -29,7 +29,7 @@ npm install url-decorator
         * **queryParam** (optional) `Object` - name of query parameter
             * **value** (optional) `String` - value of query parameter
             * **concat** (optional) `Boolean` - enable/disable concatenation; by default is `true`
-            * **browsers** (optional) `String|RegExp|Array<String>Array<RegExp>` - browsers condition. Query param
+            * **browsers** (optional) `String|RegExp|Array<String|RegExp>` - browsers condition. Query parameter
 will be applied only for configured browsers.
 
 ### Gemini usage
@@ -39,7 +39,7 @@ Add plugin to your `gemini` config file:
 ```yaml
 system:
   plugins:
-    url-decorator: true
+    url-decorator/gemini: true
 ```
 
 To pass additional url parameters you can use environment variables, which should start with `GEMINI_URL_` or specify them in the `gemini` config file.
@@ -55,7 +55,7 @@ After that your test url will be changed to: `http://localhost/test/?name=bilbo&
 The same thing you can do using `gemini` config file:
 
 ```yaml
-url-decorator:
+url-decorator/gemini:
   url:
     query:
       text:
@@ -171,3 +171,63 @@ GEMINI_URL_QUERY_NAME=gloin gemini test
 ```
 
 The result url will look like: `http://localhost/test/?name=gloin`
+
+### Browser conditions
+
+`url-decorator` gives the opportunity to set each of query parameters only for
+specified browser(s).
+
+Browsers can be:
+
+* single browser id string
+* array of multiple browser ids
+* browser mask (regular expression)
+* array of browser masks
+
+Examples:
+
+```yaml
+url-decorator/gemini:
+  url:
+    query:
+      name:
+        value: torin
+        browsers: firefox
+```
+
+```yaml
+url-decorator/gemini:
+  url:
+    query:
+      name:
+        value: torin
+        browsers:
+         - firefox
+         - chrome
+```
+
+```js
+url-decorator/gemini: {
+    url: {
+        query: {
+            name: {
+                value: 'torin',
+                browsers: /ie-\d+/  //ie-8, ie-9, ie-10, ...
+            }
+        }
+    }
+}
+```
+
+```js
+url-decorator/gemini: {
+    url: {
+        query: {
+            name: {
+                value: 'torin',
+                browsers: [/ie-\d+/, 'firefox']
+            }
+        }
+    }
+}
+```
