@@ -181,7 +181,7 @@ describe('config', () => {
                 }
             }, {});
 
-            assert.equal(result.query.foo.enabled(), true);
+            assert.equal(result.query.foo.browsers(), true);
         });
 
         it('should accept string browser criteria', () => {
@@ -189,13 +189,15 @@ describe('config', () => {
                 query: {
                     foo: {
                         value: 'some-value',
-                        enabled: 'some-browser'
+                        browsers: 'some-browser'
                     }
                 }
             }, {});
 
-            assert.equal(result.query.foo.enabled(['some-browser']), true);
-            assert.equal(result.query.foo.enabled(['another-browser']), false);
+            const browsers = result.query.foo.browsers;
+
+            assert.equal(browsers(['some-browser']), true);
+            assert.equal(browsers(['another-browser']), false);
         });
 
         it('should accept browser criteria given as regular expression', () => {
@@ -203,13 +205,15 @@ describe('config', () => {
                 query: {
                     foo: {
                         value: 'some-value',
-                        enabled: /some/
+                        browsers: /some/
                     }
                 }
             }, {});
 
-            assert.equal(result.query.foo.enabled(['some-browser']), true);
-            assert.equal(result.query.foo.enabled(['another-browser']), false);
+            const browsers = result.query.foo.browsers;
+
+            assert.equal(browsers(['some-browser']), true);
+            assert.equal(browsers(['another-browser']), false);
         });
 
         it('should accept multiple browser ids', () => {
@@ -217,14 +221,16 @@ describe('config', () => {
                 query: {
                     foo: {
                         value: 'some-value',
-                        enabled: ['browser1', 'browser2']
+                        browsers: ['browser1', 'browser2']
                     }
                 }
             }, {});
 
-            assert.equal(result.query.foo.enabled(['browser1']), true);
-            assert.equal(result.query.foo.enabled(['browser2']), true);
-            assert.equal(result.query.foo.enabled(['another-browser']), false);
+            const browsers = result.query.foo.browsers;
+
+            assert.equal(browsers(['browser1']), true);
+            assert.equal(browsers(['browser2']), true);
+            assert.equal(browsers(['another-browser']), false);
         });
 
         it('should accept multiple browser masks', () => {
@@ -232,14 +238,16 @@ describe('config', () => {
                 query: {
                     foo: {
                         value: 'some-value',
-                        enabled: [/browser1/, /browser2/]
+                        browsers: [/browser1/, /browser2/]
                     }
                 }
             }, {});
 
-            assert.equal(result.query.foo.enabled(['browser1']), true);
-            assert.equal(result.query.foo.enabled(['browser2']), true);
-            assert.equal(result.query.foo.enabled(['another-browser']), false);
+            const browsers = result.query.foo.browsers;
+
+            assert.equal(browsers(['browser1']), true);
+            assert.equal(browsers(['browser2']), true);
+            assert.equal(browsers(['another-browser']), false);
         });
 
         it('should accept browser masks and ids', () => {
@@ -247,14 +255,16 @@ describe('config', () => {
                 query: {
                     foo: {
                         value: 'some-value',
-                        enabled: ['browser1', /browser2/]
+                        browsers: ['browser1', /browser2/]
                     }
                 }
             }, {});
 
-            assert.equal(result.query.foo.enabled(['browser1']), true);
-            assert.equal(result.query.foo.enabled(['browser2']), true);
-            assert.equal(result.query.foo.enabled(['another-browser']), false);
+            const browsers = result.query.foo.browsers;
+
+            assert.equal(browsers(['browser1']), true);
+            assert.equal(browsers(['browser2']), true);
+            assert.equal(browsers(['another-browser']), false);
         });
     });
 });

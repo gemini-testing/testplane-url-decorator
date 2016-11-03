@@ -46,7 +46,7 @@ describe('url-decorator', () => {
                 query: {
                     foo: {
                         value: 'bar',
-                        enabled: _.wrap(true)
+                        browsers: _.wrap(true)
                     }
                 }
             });
@@ -75,7 +75,7 @@ describe('url-decorator', () => {
                 query: {
                     foo: {
                         value: 'bar',
-                        enabled: _.wrap(true)
+                        browsers: _.wrap(true)
                     }
                 }
             });
