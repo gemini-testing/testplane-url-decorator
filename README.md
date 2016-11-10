@@ -1,6 +1,6 @@
 # url-decorator
 
-[![npm](https://img.shields.io/npm/v/gemini.svg?maxAge=2592000)](https://www.npmjs.com/package/url-decorator)
+[![npm](https://img.shields.io/npm/v/url-decorator.svg?maxAge=2592000)](https://www.npmjs.com/package/url-decorator)
 [![Build Status](https://travis-ci.org/gemini-testing/url-decorator.svg?branch=master)](https://travis-ci.org/gemini-testing/url-decorator)
 [![Coverage Status](https://img.shields.io/coveralls/gemini-testing/url-decorator.svg?style=flat)](https://coveralls.io/r/gemini-testing/url-decorator?branch=master)
 
