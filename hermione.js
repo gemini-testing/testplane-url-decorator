@@ -11,19 +11,23 @@ module.exports = (hermione, options) => {
 
     const config = initConfig('hermione', options.url, process.env);
 
-    hermione.on(hermione.events.SESSION_START, (data) => decorateUrl(data, config));
+    hermione.on(hermione.events.SESSION_START, (session, meta) => {
+        meta = meta || {};
+        decorateUrl(session, meta.browserId, config);
+    });
 };
 
 /**
  * Decorates hermione browser url
- * @param {Object} browser
+ * @param {Object} session instance
+ * @param {String} browserId - browser identifier
  * @param {Object} config - configuration object
  */
-function decorateUrl(browser, config) {
-    const query = _.pickBy(config.query, (param) => param.isForBrowser(browser.id));
-    const baseUrlFn = browser.url;
+function decorateUrl(session, browserId, config) {
+    const query = _.pickBy(config.query, (param) => param.isForBrowser(browserId));
+    const baseUrlFn = session.url;
 
-    browser.addCommand('url', function(uri) {
+    session.addCommand('url', function(uri) {
         return baseUrlFn.call(this, uri && updateUrl(uri, query));
     }, true); // override the original method 'url'
 }

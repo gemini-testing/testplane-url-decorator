@@ -19,8 +19,8 @@ describe('url-decorator/hermione', () => {
 
     let hermione;
 
-    const mkBrowser = (id) => {
-        const browser = {id};
+    const mkBrowser = () => {
+        const browser = {};
 
         browser.url = sandbox.stub().named('url');
 
@@ -59,7 +59,7 @@ describe('url-decorator/hermione', () => {
 
         plugin(hermione, {});
 
-        hermione.emit(hermione.events.SESSION_START, browser);
+        hermione.emit(hermione.events.SESSION_START, browser, {});
 
         browser.url();
 
@@ -81,7 +81,7 @@ describe('url-decorator/hermione', () => {
             }
         });
 
-        hermione.emit(hermione.events.SESSION_START, browser);
+        hermione.emit(hermione.events.SESSION_START, browser, {});
 
         browser.url('/?text=text');
 
@@ -90,7 +90,7 @@ describe('url-decorator/hermione', () => {
     });
 
     it('should use only browser matched query parameters', () => {
-        const browser = mkBrowser('foo-bro');
+        const browser = mkBrowser();
         const baseUrlFn = browser.url;
 
         plugin(hermione, {
@@ -108,7 +108,7 @@ describe('url-decorator/hermione', () => {
             }
         });
 
-        hermione.emit(hermione.events.SESSION_START, browser);
+        hermione.emit(hermione.events.SESSION_START, browser, {browserId: 'foo-bro'});
 
         browser.url('/?text=text');
 
