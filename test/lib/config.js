@@ -18,7 +18,7 @@ describe('lib/config', () => {
             assert.match(query[0], {name: 'foo', value: 'bar'});
         });
 
-        it('should set "override" mode by default', () => {
+        it('should set "concat" mode by default', () => {
             const config = new Config({query: [
                 {
                     name: 'foo',
@@ -36,13 +36,22 @@ describe('lib/config', () => {
                 {
                     name: 'foo',
                     value: 'bar',
-                    mode: 'concat'
+                    mode: 'override'
                 }
             ]}, {}, 'gemini');
 
             const query = config.getQueryForBrowser('some-browser');
 
-            assert.propertyVal(query[0], 'mode', 'concat');
+            assert.propertyVal(query[0], 'mode', 'override');
+        });
+
+        it('should accept query given as object', () => {
+            const config = new Config({query: {foo: 'bar'}}, {}, 'gemini');
+
+            const query = config.getQueryForBrowser('some-browser');
+
+            assert.lengthOf(query, 1);
+            assert.match(query[0], {name: 'foo', value: 'bar'});
         });
     });
 

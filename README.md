@@ -26,10 +26,11 @@ npm install url-decorator
 
 * **enabled** (optional) `Boolean` – enable/disable the plugin; by default plugin is enabled
 * **url** (optional) `Object` - the list of url parameters, which will be added in each test url
-    * **query** (optional) `Object` - the list of query parameters
-        * **queryParam** (optional) `Object` - name of query parameter
-            * **value** (optional) `String` - value of query parameter
-            * **concat** (optional) `Boolean` - enable/disable concatenation; by default is `true`
+    * **query** (optional) `Array` - the list of query parameters
+        * **queryParam** (optional) `Object` - query parameter object with fields:
+            * **name** (optional) `String` - name of query parameter
+            * **value** (optional) `String|Number|Array` - value of query parameter
+            * **mode** (optional) `String` - parameters joining strategy. Can be `concat` or `override`. By default is `concat`.
             * **browsers** (optional) `String|RegExp|Array<String|RegExp>` - browsers condition. Query parameter
 will be applied only for configured browsers.
 
@@ -59,10 +60,10 @@ The same thing you can do using `gemini` config file:
 url-decorator/gemini:
   url:
     query:
-      text:
+      - name: text
         value: ololo
-      # or
-      text: ololo
+    # or
+        text: ololo
 ```
 
 Note: environment variables have higher priority than config values.
@@ -98,11 +99,14 @@ The same thing you can do using `hermione` config file:
 ```js
 'url-decorator/hermione': {
     url: {
-        query: {
-            text: {
+        query: [
+            {
+                name: 'text'
                 value: 'ololo'
             }
-            // or
+        ]
+        // or
+        query: {
             text: 'ololo'
         }
     }
@@ -121,14 +125,12 @@ Suppose, you want to add query parameter `name` which is already presented in yo
 url-decorator/gemini:
   url:
     query:
-      name:
-        value: torin
-        concat: true
+      - name: 'name'
+        value: 'torin'
+        mode: 'concat'
       # or
-      name:
+      - name: 'name'
         value: torin
-      # or
-      name: torin
 
 ```
 
@@ -140,14 +142,10 @@ Moreover for previous test url you can specify a set of values for one query par
 url-decorator/gemini:
   url:
     query:
-      name:
+      - name: 'name'
         value:
           - torin
           - gloin
-      # or
-      name:
-        - torin
-        - gloin
 ```
 
 The result url will look like: `http://localhost/test/?name=bilbo&name=torin&name=gloin`
@@ -158,9 +156,9 @@ If you want to override value of `name` query parameter:
 url-decorator/gemini:
   url:
     query:
-      name:
+      - name: 'name'
         value: torin
-        concat: false
+        mode: 'override'
 ```
 
 As a result url will look like: `http://localhost/test/?name=torin`.
@@ -191,7 +189,7 @@ Examples:
 url-decorator/gemini:
   url:
     query:
-      name:
+      - name: 'name'
         value: torin
         browsers: firefox
 ```
@@ -200,7 +198,7 @@ url-decorator/gemini:
 url-decorator/gemini:
   url:
     query:
-      name:
+      - name: 'name'
         value: torin
         browsers:
          - firefox
@@ -210,12 +208,13 @@ url-decorator/gemini:
 ```js
 url-decorator/gemini: {
     url: {
-        query: {
-            name: {
+        query: [
+            {
+                name: 'name',
                 value: 'torin',
                 browsers: /ie-\d+/  //ie-8, ie-9, ie-10, ...
             }
-        }
+        ]
     }
 }
 ```
@@ -223,12 +222,13 @@ url-decorator/gemini: {
 ```js
 url-decorator/gemini: {
     url: {
-        query: {
-            name: {
+        query: [
+            {
+                name: 'name',
                 value: 'torin',
                 browsers: [/ie-\d+/, 'firefox']
             }
-        }
+        ]
     }
 }
 ```
