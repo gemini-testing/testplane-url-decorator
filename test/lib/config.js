@@ -1,230 +1,251 @@
 'use strict';
 
-const _ = require('lodash');
-const configInit = require('../../lib/config').init;
+const Config = require('../../lib/config');
 
-describe('config', () => {
-    const sandbox = sinon.sandbox.create();
-
-    afterEach(() => sandbox.restore());
-
-    it('should return empty object if config and environment variables are not specified', () => {
-        assert.deepEqual(configInit(), {});
-    });
-
-    it('should return empty object if environment variables are specified as empty string', () => {
-        assert.deepEqual(configInit('gemini', {}, {
-            'GEMINI_URL_QUERY_TEXT': ''
-        }), {});
-    });
-
-    it('should return values from config if environment variables are not specified', () => {
-        const configUrl = {
-            query: {
-                text: {
-                    value: 'hello'
+describe('lib/config', () => {
+    describe('parse query parameters from configuration file', () => {
+        it('should use query from given configuration', () => {
+            const config = new Config({query: [
+                {
+                    name: 'foo',
+                    value: 'bar'
                 }
-            }
-        };
+            ]}, {}, 'gemini');
 
-        assert.deepEqual(configInit('gemini', configUrl), configUrl);
-    });
+            const query = config.getQueryForBrowser('some-browser');
 
-    it('should return values from environment variables if config is not specified', () => {
-        const envVars = {
-            'GEMINI_URL_QUERY_FOO': 'bar'
-        };
-
-        const result = configInit('gemini', {}, envVars);
-
-        assert.deepPropertyVal(result, 'query.foo.value', 'bar');
-    });
-
-    it('should override values from config by values from environment variables', () => {
-        const configUrl = {
-            query: {
-                text: {
-                    value: 'fromConfig'
-                }
-            }
-        };
-
-        const envVars = {
-            'GEMINI_URL_QUERY_TEXT': 'fromEnv'
-        };
-
-        const result = configInit('gemini', configUrl, envVars);
-
-        assert.deepPropertyVal(result, 'query.text.value', 'fromEnv');
-    });
-
-    it('should merge values from config and from environment variables', () => {
-        const configUrl = {
-            query: {
-                name: {
-                    value: 'gemini'
-                }
-            }
-        };
-
-        const envVars = {
-            'GEMINI_URL_QUERY_TEXT': 'hello'
-        };
-
-        const result = configInit('gemini', configUrl, envVars);
-
-        assert.deepPropertyVal(result, 'query.name.value', 'gemini');
-        assert.deepPropertyVal(result, 'query.text.value', 'hello');
-    });
-
-    it('should use `concat` value from config if environment variables have the same url parameter', () => {
-        const configUrl = {
-            query: {
-                text: {
-                    concat: false
-                }
-            }
-        };
-
-        const envVars = {
-            'GEMINI_URL_QUERY_TEXT': 'fromEnv'
-        };
-
-        const result = configInit('gemini', configUrl, envVars);
-
-        assert.deepPropertyVal(result, 'query.text.value', 'fromEnv');
-        assert.deepPropertyVal(result, 'query.text.concat', false);
-    });
-
-    describe('parsing url parameters from config file', () => {
-        it('should return empty object if config is not an object', () => {
-            assert.deepEqual(configInit('gemini', ''), {});
+            assert.lengthOf(query, 1);
+            assert.match(query[0], {name: 'foo', value: 'bar'});
         });
 
-        it('should return empty object if config is empty object', () => {
-            assert.deepEqual(configInit('gemini', {}), {});
+        it('should set "override" mode by default', () => {
+            const config = new Config({query: [
+                {
+                    name: 'foo',
+                    value: 'bar'
+                }
+            ]}, {}, 'gemini');
+
+            const query = config.getQueryForBrowser('some-browser');
+
+            assert.propertyVal(query[0], 'mode', 'concat');
         });
 
-        it('should set "value" field for query parameters if they are specified as a string', () => {
-            const configUrl = {
-                query: {
-                    name: 'foo'
+        it('should use given mode if it set directly', () => {
+            const config = new Config({query: [
+                {
+                    name: 'foo',
+                    value: 'bar',
+                    mode: 'concat'
                 }
-            };
+            ]}, {}, 'gemini');
 
-            assert.deepPropertyVal(configInit('gemini', configUrl), 'query.name.value', 'foo');
-        });
+            const query = config.getQueryForBrowser('some-browser');
 
-        it('should set "value" field for query parameters if they are specified as an array', () => {
-            const configUrl = {
-                query: {
-                    name: ['foo', 'bar']
-                }
-            };
-
-            assert.sameMembers(configInit('gemini', configUrl).query.name.value, ['foo', 'bar']);
-        });
-
-        it('should set "concat" field as true by default', () => {
-            const configUrl = {
-                query: {
-                    name: 'foo'
-                }
-            };
-
-            assert.deepPropertyVal(configInit('gemini', configUrl), 'query.name.concat', true);
+            assert.propertyVal(query[0], 'mode', 'concat');
         });
     });
 
-    describe('parsing url parameters from environment variables', () => {
-        it('should return empty object if environment variables are not specified', () => {
-            assert.deepEqual(configInit({}), {});
+    describe('parse query parameters from environment variables', () => {
+        it('should use "GEMINI_URL_QUERY" prefixed parameters', () => {
+            const config = new Config({query: []}, {
+                GEMINI_URL_QUERY_FOO: 'bar'
+            }, 'gemini');
+
+            const query = config.getQueryForBrowser('some-browser');
+
+            assert.lengthOf(query, 1);
+            assert.match(query[0], {name: 'foo', value: 'bar'});
         });
 
-        it('should return empty object if environment variables do not fit plugin', () => {
-            const envVars = {
-                'GEMINI_URL_QUERY': 'test'
-            };
+        it('should use "HERMIONE_URL_QUERY" prefixed parameters', () => {
+            const config = new Config({query: []}, {
+                HERMIONE_URL_QUERY_FOO: 'bar'
+            }, 'hermione');
 
-            assert.deepEqual(configInit('gemini', {}, envVars), {});
+            const query = config.getQueryForBrowser('some-browser');
+
+            assert.lengthOf(query, 1);
+            assert.match(query[0], {name: 'foo', value: 'bar'});
         });
 
-        it('should parse url parameters from environment variables', () => {
-            const envVars = {
-                'GEMINI_URL_QUERY_PATH_DIR': 'hello/world'
-            };
+        it('should not use another environment parameters', () => {
+            const config = new Config({query: []}, {
+                HERMIONE_URL_QUERY_FOO: 'bar',
+                SOME_ANOTHER_QUERY_PARAM: 'another-value'
+            }, 'hermione');
 
-            const result = configInit('gemini', {}, envVars);
+            const query = config.getQueryForBrowser('some-browser');
 
-            assert.deepPropertyVal(result, 'query.path_dir.value', 'hello/world');
+            assert.lengthOf(query, 1);
         });
 
-        it('should parse several url parameters from environment variables', () => {
-            const envVars = {
-                'GEMINI_URL_QUERY_NAME': 'qwerty',
-                'GEMINI_URL_QUERY_HAIR': 'ginger'
-            };
+        it('should append query parameter from env variable if it does not exists in config', () => {
+            const config = new Config({query: [
+                {
+                    name: 'foo',
+                    value: 'foo value'
+                }
+            ]}, {
+                HERMIONE_URL_QUERY_BAR: 'bar value'
+            }, 'hermione');
 
-            const result = configInit('gemini', {}, envVars);
+            const query = config.getQueryForBrowser('some-browser');
 
-            assert.deepPropertyVal(result, 'query.name.value', 'qwerty');
-            assert.deepPropertyVal(result, 'query.hair.value', 'ginger');
+            assert.lengthOf(query, 2);
+            assert.match(query[0], {name: 'foo', value: 'foo value'});
+            assert.match(query[1], {name: 'bar', value: 'bar value'});
+        });
+
+        it('should override existed query parameter by value from env variable', () => {
+            const config = new Config({query: [
+                {
+                    name: 'foo',
+                    value: 'foo value'
+                }
+            ]}, {
+                HERMIONE_URL_QUERY_FOO: 'another foo value'
+            }, 'hermione');
+
+            const query = config.getQueryForBrowser('some-browser');
+
+            assert.lengthOf(query, 1);
+            assert.match(query[0], {name: 'foo', value: 'another foo value'});
+        });
+
+        it('should override multiple existed query parameters', () => {
+            const config = new Config({query: [
+                {name: 'foo', value: 'some foo value'},
+                {name: 'foo', value: 'another foo value'}
+            ]}, {
+                HERMIONE_URL_QUERY_FOO: 'environment foo value'
+            }, 'hermione');
+
+            const query = config.getQueryForBrowser('some-browser');
+
+            assert.lengthOf(query, 1);
+            assert.match(query[0], {name: 'foo', value: 'environment foo value'});
+        });
+
+        it('should apply query parameters from env variable for all browsers', () => {
+            const config = new Config({query: []}, {
+                HERMIONE_URL_QUERY_FOO: 'bar'
+            }, 'hermione');
+
+            const query = config.getQueryForBrowser('some-browser');
+
+            assert.equal(query[0].isForBrowser.toString(), '() => true');
+        });
+
+        it('should use "override" mode for query parameter from env variable', () => {
+            const config = new Config({query: []}, {
+                HERMIONE_URL_QUERY_FOO: 'bar'
+            }, 'hermione');
+
+            const query = config.getQueryForBrowser('some-browser');
+
+            assert.equal(query[0].mode, 'override');
         });
     });
 
-    describe('matching query browsers with passed', () => {
-        function mkParam_(opts) {
-            const config = configInit('gemini', {
-                query: {
-                    foo: _.extend({value: 'some-value'}, opts)
-                }
-            }, {});
+    describe('getQueryForBrowser', () => {
+        describe('should return query items', () => {
+            it('without browsers criteria', () => {
+                const config = new Config({query: [
+                    {
+                        name: 'foo',
+                        value: 'bar'
+                    }
+                ]}, {}, 'gemini');
 
-            return config.query.foo;
-        }
+                const query = config.getQueryForBrowser('some-browser');
 
-        it('should accept any browser by default', () => {
-            const param = mkParam_();
+                assert.match(query[0], {name: 'foo', value: 'bar'});
+            });
 
-            assert.isTrue(param.isForBrowser('some-browser'));
-        });
+            it('specified as single browser identifier', () => {
+                const config = new Config({query: [
+                    {
+                        name: 'foo',
+                        value: 'bar',
+                        browsers: 'bro1'
+                    }
+                ]}, {}, 'gemini');
 
-        it('should accept string browser criteria', () => {
-            const param = mkParam_({browsers: 'some-browser'});
+                const query = config.getQueryForBrowser('bro1');
 
-            assert.isTrue(param.isForBrowser('some-browser'));
-            assert.isFalse(param.isForBrowser('another-browser'));
-        });
+                assert.match(query[0], {name: 'foo', value: 'bar'});
+                assert.lengthOf(config.getQueryForBrowser('another-bro'), 0);
+            });
 
-        it('should accept browser criteria given as regular expression', () => {
-            const param = mkParam_({browsers: /some/});
+            it('specified as set of browser identifiers', () => {
+                const config = new Config({query: [
+                    {
+                        name: 'foo',
+                        value: 'bar',
+                        browsers: ['bro1', 'bro2']
+                    }
+                ]}, {}, 'gemini');
 
-            assert.isTrue(param.isForBrowser('some-browser'));
-            assert.isFalse(param.isForBrowser('another-browser'));
-        });
+                const query1 = config.getQueryForBrowser('bro1');
+                const query2 = config.getQueryForBrowser('bro2');
 
-        it('should accept multiple browser ids', () => {
-            const param = mkParam_({browsers: ['browser1', 'browser2']});
+                assert.match(query1[0], {name: 'foo', value: 'bar'});
+                assert.match(query2[0], {name: 'foo', value: 'bar'});
 
-            assert.isTrue(param.isForBrowser('browser1'));
-            assert.isTrue(param.isForBrowser('browser2'));
-            assert.isFalse(param.isForBrowser('another-browser'));
-        });
+                assert.lengthOf(config.getQueryForBrowser('another-bro'), 0);
+            });
 
-        it('should accept multiple browser masks', () => {
-            const param = mkParam_({browsers: [/browser1/, /browser2/]});
+            it('specified as single mask', () => {
+                const config = new Config({query: [
+                    {
+                        name: 'foo',
+                        value: 'bar',
+                        browsers: /bro1/
+                    }
+                ]}, {}, 'gemini');
 
-            assert.isTrue(param.isForBrowser('browser1'));
-            assert.isTrue(param.isForBrowser('browser2'));
-            assert.isFalse(param.isForBrowser('another-browser'));
-        });
+                const query = config.getQueryForBrowser('bro1');
 
-        it('should accept browser masks and ids', () => {
-            const param = mkParam_({browsers: ['browser1', /browser2/]});
+                assert.match(query[0], {name: 'foo', value: 'bar'});
+                assert.lengthOf(config.getQueryForBrowser('another-bro'), 0);
+            });
 
-            assert.isTrue(param.isForBrowser('browser1'));
-            assert.isTrue(param.isForBrowser('browser2'));
-            assert.isFalse(param.isForBrowser('another-browser'));
+            it('specified as set of browser masks', () => {
+                const config = new Config({query: [
+                    {
+                        name: 'foo',
+                        value: 'bar',
+                        browsers: [/bro1/, /bro2/]
+                    }
+                ]}, {}, 'gemini');
+
+                const query1 = config.getQueryForBrowser('bro1');
+                const query2 = config.getQueryForBrowser('bro2');
+
+                assert.match(query1[0], {name: 'foo', value: 'bar'});
+                assert.match(query2[0], {name: 'foo', value: 'bar'});
+
+                assert.lengthOf(config.getQueryForBrowser('another-bro'), 0);
+            });
+
+            it('specified as mixed set of browser ids and masks', () => {
+                const config = new Config({query: [
+                    {
+                        name: 'foo',
+                        value: 'bar',
+                        browsers: ['bro1', /bro2/]
+                    }
+                ]}, {}, 'gemini');
+
+                const query1 = config.getQueryForBrowser('bro1');
+                const query2 = config.getQueryForBrowser('bro2');
+
+                assert.match(query1[0], {name: 'foo', value: 'bar'});
+                assert.match(query2[0], {name: 'foo', value: 'bar'});
+
+                assert.lengthOf(config.getQueryForBrowser('another-bro'), 0);
+            });
         });
     });
 });

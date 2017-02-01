@@ -73,11 +73,12 @@ describe('url-decorator/hermione', () => {
 
         plugin(hermione, {
             url: {
-                query: {
-                    foo: {
+                query: [
+                    {
+                        name: 'foo',
                         value: 'bar'
                     }
-                }
+                ]
             }
         });
 
@@ -95,16 +96,18 @@ describe('url-decorator/hermione', () => {
 
         plugin(hermione, {
             url: {
-                query: {
-                    foo: {
+                query: [
+                    {
+                        name: 'foo',
                         value: 'foo',
                         browsers: 'foo-bro'
                     },
-                    bar: {
+                    {
+                        name: 'bar',
                         value: 'bar',
                         browsers: 'bar-bro'
                     }
-                }
+                ]
             }
         });
 

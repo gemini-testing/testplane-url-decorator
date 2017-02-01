@@ -1,7 +1,7 @@
 'use strict';
 
 const _ = require('lodash');
-const initConfig = require('./lib/config').init;
+const Config = require('./lib/config');
 const updateUrl = require('./lib/url-updater').updateUrl;
 
 module.exports = (hermione, options) => {
@@ -9,22 +9,20 @@ module.exports = (hermione, options) => {
         return;
     }
 
-    const config = initConfig('hermione', options.url, process.env);
+    const config = new Config(options.url, process.env, 'hermione');
 
     hermione.on(hermione.events.SESSION_START, (session, meta) => {
         meta = meta || {};
-        decorateUrl(session, meta.browserId, config);
+        decorateUrl(session, config.getQueryForBrowser(meta.browserId));
     });
 };
 
 /**
  * Decorates hermione browser url
  * @param {Object} session instance
- * @param {String} browserId - browser identifier
- * @param {Object} config - configuration object
+ * @param {Object} query
  */
-function decorateUrl(session, browserId, config) {
-    const query = _.pickBy(config.query, (param) => param.isForBrowser(browserId));
+function decorateUrl(session, query) {
     const baseUrlFn = session.url;
 
     session.addCommand('url', function(uri) {

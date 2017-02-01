@@ -79,23 +79,25 @@ describe('url-decorator/gemini', () => {
 
         plugin(gemini, {
             url: {
-                query: {
-                    foo: {
+                query: [
+                    {
+                        name: 'foo',
                         value: 'foo',
                         browsers: 'foo-bro'
                     },
-                    bar: {
+                    {
+                        name: 'bar',
                         value: 'bar',
                         browsers: 'bar-bro'
                     }
-                }
+                ]
             }
         });
         gemini.emit(gemini.events.BEGIN_SUITE, data);
 
         const query = urlUpdater.updateUrl.firstCall.args[1];
 
-        assert.property(query, 'foo');
-        assert.notProperty(query, 'bar');
+        assert.propertyVal(query[0], 'name', 'foo');
+        assert.propertyNotVal(query[0], 'name', 'bar');
     });
 });

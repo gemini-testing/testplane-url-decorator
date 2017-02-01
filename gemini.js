@@ -1,7 +1,7 @@
 'use strict';
 
 const _ = require('lodash');
-const initConfig = require('./lib/config').init;
+const Config = require('./lib/config');
 const urlUpdater = require('./lib/url-updater');
 
 module.exports = (gemini, options) => {
@@ -9,7 +9,7 @@ module.exports = (gemini, options) => {
         return;
     }
 
-    const config = initConfig('gemini', options.url, process.env);
+    const config = new Config(options.url, process.env, 'gemini');
 
     gemini.on(gemini.events.BEGIN_SUITE, (data) => decorateUrl(data, config));
 };
@@ -19,7 +19,7 @@ module.exports = (gemini, options) => {
  * @param {Object} data
  * @param {Suite} data.suite
  * @param {String} data.browserId
- * @param {Object} config - configuration object
+ * @param {Config} config - configuration instance
  */
 function decorateUrl(data, config) {
     const suite = data.suite;
@@ -28,7 +28,5 @@ function decorateUrl(data, config) {
         return;
     }
 
-    const query = _.pickBy(config.query, (param) => param.isForBrowser(data.browserId));
-
-    suite.url = urlUpdater.updateUrl(suite.url, query);
+    suite.url = urlUpdater.updateUrl(suite.url, config.getQueryForBrowser(data.browserId));
 }
