@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.0.0"></a>
+# [1.0.0](https://github.com/:gemini-testing/url-decorator/compare/v0.2.1...v1.0.0) (2017-02-02)
+
+
+### Features
+
+* Change plugin configuration format ([9b2fc24](https://github.com/:gemini-testing/url-decorator/commit/9b2fc24))
+
+
+
 <a name="0.2.1"></a>
 ## [0.2.1](https://github.com/:gemini-testing/url-decorator/compare/v0.2.0...v0.2.1) (2016-11-11)
 
