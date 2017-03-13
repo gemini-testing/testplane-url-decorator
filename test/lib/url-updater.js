@@ -44,6 +44,16 @@ describe('url-updater', () => {
         });
     });
 
+    it('should extend url only with uniq parameters', () => {
+        const query = [
+            {name: 'text', value: 'foo'},
+            {name: 'text', value: 'foo'}
+        ];
+        const result = updateUrl(sourceUrl, query);
+
+        assert.equal(result, '/?text=text&text=foo');
+    });
+
     it('should override parameters if parameter mode is "override"', () => {
         const query = [{name: 'text', value: 'foo', mode: 'override'}];
 

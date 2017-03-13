@@ -50,20 +50,10 @@ describe('url-decorator/gemini', () => {
         assert.equal(data.suite.url, 'http://suite/updated/url');
     });
 
-    it('should decorate suite url  if suite hasn\'t own url', () => {
-        const data = {suite: {}};
-
-        plugin(gemini, {});
-        gemini.emit(gemini.events.BEGIN_SUITE, data);
-
-        assert.notCalled(urlUpdater.updateUrl);
-    });
-
-    it('should not decorate suite if suite url exists only in prototype', () => {
-        const proto = {url: 'rootUrl'};
-        const suite = Object.create(proto);
-
-        const data = {suite};
+    it('should not decorate suite url if suite url is null', () => {
+        const data = {suite: {
+            url: null
+        }};
 
         plugin(gemini, {});
         gemini.emit(gemini.events.BEGIN_SUITE, data);
