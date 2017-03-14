@@ -24,7 +24,7 @@ module.exports = (gemini, options) => {
 function decorateUrl(data, config) {
     const suite = data.suite;
 
-    if (!suite.hasOwnProperty('url')) {
+    if (suite.url === null) {
         return;
     }
 
