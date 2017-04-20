@@ -106,7 +106,7 @@ describe('lib/config', () => {
             assert.match(query[1], {name: 'bar', value: 'bar value'});
         });
 
-        it('should override existed query parameter by value from env variable', () => {
+        it('should concat parameter from env variable to existent query parameters', () => {
             const config = new Config({query: [
                 {
                     name: 'foo',
@@ -118,22 +118,9 @@ describe('lib/config', () => {
 
             const query = config.getQueryForBrowser('some-browser');
 
-            assert.lengthOf(query, 1);
-            assert.match(query[0], {name: 'foo', value: 'another foo value'});
-        });
-
-        it('should override multiple existed query parameters', () => {
-            const config = new Config({query: [
-                {name: 'foo', value: 'some foo value'},
-                {name: 'foo', value: 'another foo value'}
-            ]}, {
-                HERMIONE_URL_QUERY_FOO: 'environment foo value'
-            }, 'hermione');
-
-            const query = config.getQueryForBrowser('some-browser');
-
-            assert.lengthOf(query, 1);
-            assert.match(query[0], {name: 'foo', value: 'environment foo value'});
+            assert.lengthOf(query, 2);
+            assert.match(query[0], {name: 'foo', value: 'foo value'});
+            assert.match(query[1], {name: 'foo', value: 'another foo value'});
         });
 
         it('should apply query parameters from env variable for all browsers', () => {
@@ -146,14 +133,14 @@ describe('lib/config', () => {
             assert.equal(query[0].isForBrowser.toString(), '() => true');
         });
 
-        it('should use "override" mode for query parameter from env variable', () => {
+        it('should use "concat" mode for query parameter from env variable', () => {
             const config = new Config({query: []}, {
                 HERMIONE_URL_QUERY_FOO: 'bar'
             }, 'hermione');
 
             const query = config.getQueryForBrowser('some-browser');
 
-            assert.equal(query[0].mode, 'override');
+            assert.equal(query[0].mode, 'concat');
         });
     });
 
