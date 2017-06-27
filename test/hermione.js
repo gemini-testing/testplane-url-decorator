@@ -19,11 +19,12 @@ describe('url-decorator/hermione', () => {
 
     let hermione;
 
-    const mkBrowser = () => {
+    const mkBrowser = (browserId) => {
         const browser = {};
 
         browser.url = sandbox.stub().named('url');
 
+        browser.browserId = browserId;
         browser.addCommand = _.noop;
         sandbox.stub(browser, 'addCommand', (name, command) => {
             browser[name] = command.bind(browser);
@@ -59,7 +60,7 @@ describe('url-decorator/hermione', () => {
 
         plugin(hermione, {});
 
-        hermione.emit(hermione.events.SESSION_START, browser, {});
+        hermione.emit(hermione.events.SESSION_START, browser);
 
         browser.url();
 
@@ -82,7 +83,7 @@ describe('url-decorator/hermione', () => {
             }
         });
 
-        hermione.emit(hermione.events.SESSION_START, browser, {});
+        hermione.emit(hermione.events.SESSION_START, browser);
 
         browser.url('/?text=text');
 
@@ -91,7 +92,7 @@ describe('url-decorator/hermione', () => {
     });
 
     it('should use only browser matched query parameters', () => {
-        const browser = mkBrowser();
+        const browser = mkBrowser('foo-bro');
         const baseUrlFn = browser.url;
 
         plugin(hermione, {
@@ -111,7 +112,7 @@ describe('url-decorator/hermione', () => {
             }
         });
 
-        hermione.emit(hermione.events.SESSION_START, browser, {browserId: 'foo-bro'});
+        hermione.emit(hermione.events.SESSION_START, browser);
 
         browser.url('/?text=text');
 
