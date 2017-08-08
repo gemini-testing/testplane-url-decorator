@@ -11,7 +11,7 @@ module.exports = (hermione, options) => {
 
     const config = new Config(options.url, process.env, 'hermione');
 
-    hermione.on(hermione.events.SESSION_START, (session, meta) => {
+    hermione.on(hermione.events.NEW_BROWSER, (session, meta) => {
         meta = meta || {};
         decorateUrl(session, config.getQueryForBrowser(meta.browserId));
     });

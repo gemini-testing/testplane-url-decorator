@@ -8,7 +8,7 @@ const plugin = require('../hermione');
 const mkHermione_ = () => {
     const emitter = new EventEmitter();
     emitter.events = {
-        SESSION_START: 'sessionStart'
+        NEW_BROWSER: 'newBrowser'
     };
 
     return emitter;
@@ -59,7 +59,7 @@ describe('url-decorator/hermione', () => {
 
         plugin(hermione, {});
 
-        hermione.emit(hermione.events.SESSION_START, browser, {});
+        hermione.emit(hermione.events.NEW_BROWSER, browser, {});
 
         browser.url();
 
@@ -82,7 +82,7 @@ describe('url-decorator/hermione', () => {
             }
         });
 
-        hermione.emit(hermione.events.SESSION_START, browser, {});
+        hermione.emit(hermione.events.NEW_BROWSER, browser, {});
 
         browser.url('/?text=text');
 
@@ -111,7 +111,7 @@ describe('url-decorator/hermione', () => {
             }
         });
 
-        hermione.emit(hermione.events.SESSION_START, browser, {browserId: 'foo-bro'});
+        hermione.emit(hermione.events.NEW_BROWSER, browser, {browserId: 'foo-bro'});
 
         browser.url('/?text=text');
 
