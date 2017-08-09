@@ -5,7 +5,7 @@
   "main": "gemini.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com:gemini-testing/url-decorator.git"
+    "url": "https://github.com/gemini-testing/url-decorator.git"
   },
   "bugs": "https://github.com/gemini-testing/url-decorator/issues",
   "scripts": {
