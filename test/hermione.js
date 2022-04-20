@@ -24,9 +24,9 @@ describe('url-decorator/hermione', () => {
 
         browser.url = sandbox.stub().named('url');
 
-        browser.addCommand = _.noop;
-        sandbox.stub(browser, 'addCommand', (name, command) => {
-            browser[name] = command.bind(browser);
+        browser.overwriteCommand = _.noop;
+        sandbox.stub(browser, 'overwriteCommand', (name, command) => {
+            browser[name] = command.bind(browser, browser[name]);
         });
 
         return browser;
@@ -63,7 +63,6 @@ describe('url-decorator/hermione', () => {
 
         browser.url();
 
-        assert.calledOn(baseUrlFn, browser);
         assert.calledWith(baseUrlFn, undefined);
     });
 
@@ -86,7 +85,6 @@ describe('url-decorator/hermione', () => {
 
         browser.url('/?text=text');
 
-        assert.calledOn(baseUrlFn, browser);
         assert.calledWith(baseUrlFn, '/?text=text&foo=bar');
     });
 
@@ -115,7 +113,6 @@ describe('url-decorator/hermione', () => {
 
         browser.url('/?text=text');
 
-        assert.calledOn(baseUrlFn, browser);
         assert.calledWith(baseUrlFn, '/?text=text&foo=foo');
     });
 });

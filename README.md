@@ -7,9 +7,9 @@
 Common plugin for:
 
 * [gemini](https://github.com/gemini-testing/gemini)
-* [hermione](https://github.com/gemini-testing/hermione) 
+* [hermione](https://github.com/gemini-testing/hermione)
 
-which is intended to change test urls in runtime. 
+which is intended to change test urls in runtime.
 
 You can read more about gemini plugins [here](https://github.com/gemini-testing/gemini/blob/master/doc/plugins.md)
 and hermione plugins [here](https://github.com/gemini-testing/hermione#plugins).
@@ -112,6 +112,14 @@ The same thing you can do using `hermione` config file:
     }
 }
 ```
+
+In case when you need to add queries that can't be expressed with an environment variable (for example, 'foo-bar=baz') you can add it via environment variable `HERMIONE_URL_CUSTOM_QUERIES` as a string delimited with `;`. For example,
+
+```bash
+HERMIONE_URL_CUSTOM_QUERIES='foo-bar=baz;qux=1' hermione
+```
+
+After that your test url will be changed to: `http://localhost/test/?foo-bar=baz&qux=1`.
 
 Note: environment variables have higher priority than config values.
 
