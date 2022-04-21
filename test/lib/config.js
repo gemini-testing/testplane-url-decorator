@@ -142,6 +142,18 @@ describe('lib/config', () => {
 
             assert.equal(query[0].mode, 'concat');
         });
+
+        it('should parse extra queries from env', () => {
+            const config = new Config({query: []}, {
+                HERMIONE_URL_CUSTOM_QUERIES: 'foo-bar=baz;qux=baz=1'
+            }, 'hermione');
+
+            const query = config.getQueryForBrowser('some-browser');
+
+            assert.lengthOf(query, 2);
+            assert.match(query[0], {name: 'foo-bar', value: 'baz'});
+            assert.match(query[1], {name: 'qux', value: 'baz=1'});
+        });
     });
 
     describe('getQueryForBrowser', () => {

@@ -23,9 +23,5 @@ module.exports = (hermione, options) => {
  * @param {Object} query
  */
 function decorateUrl(session, query) {
-    const baseUrlFn = session.url;
-
-    session.addCommand('url', function(uri) {
-        return baseUrlFn.call(this, uri && updateUrl(uri, query));
-    }, true); // override the original method 'url'
+    session.overwriteCommand('url', (baseUrlFn, uri) => baseUrlFn(uri && updateUrl(uri, query)));
 }
