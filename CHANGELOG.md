@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.0.0"></a>
+# [3.0.0](https://github.com/gemini-testing/url-decorator/compare/v2.1.2...v3.0.0) (2022-04-21)
+
+
+### Features
+
+* add ability to add list of queries via env ([607e02b](https://github.com/gemini-testing/url-decorator/commit/607e02b))
+
+
+### BREAKING CHANGES
+
+* drop hermione@3.x support
+
+
+
 <a name="2.1.2"></a>
 ## [2.1.2](https://github.com/gemini-testing/url-decorator/compare/v2.1.1...v2.1.2) (2017-08-14)
 

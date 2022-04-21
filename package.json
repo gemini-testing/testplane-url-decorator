@@ -1,6 +1,6 @@
 {
   "name": "url-decorator",
-  "version": "2.1.2",
+  "version": "3.0.0",
   "description": "Plugin for gemini and hermione which is intended to add additional parameters to test urls",
   "main": "gemini.js",
   "repository": {
