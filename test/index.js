@@ -3,7 +3,7 @@
 const _ = require('lodash');
 const EventEmitter = require('events').EventEmitter;
 const urlUpdater = require('../lib/url-updater');
-const plugin = require('../hermione');
+const plugin = require('..');
 
 const mkHermione_ = () => {
     const emitter = new EventEmitter();
@@ -14,7 +14,7 @@ const mkHermione_ = () => {
     return emitter;
 };
 
-describe('url-decorator/hermione', () => {
+describe('url-decorator', () => {
     const sandbox = sinon.sandbox.create();
 
     let hermione;

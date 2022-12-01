@@ -10,7 +10,7 @@ describe('lib/config', () => {
                     name: 'foo',
                     value: 'bar'
                 }
-            ]}, {}, 'gemini');
+            ]}, {});
 
             const query = config.getQueryForBrowser('some-browser');
 
@@ -24,7 +24,7 @@ describe('lib/config', () => {
                     name: 'foo',
                     value: 'bar'
                 }
-            ]}, {}, 'gemini');
+            ]}, {});
 
             const query = config.getQueryForBrowser('some-browser');
 
@@ -38,7 +38,7 @@ describe('lib/config', () => {
                     value: 'bar',
                     mode: 'override'
                 }
-            ]}, {}, 'gemini');
+            ]}, {});
 
             const query = config.getQueryForBrowser('some-browser');
 
@@ -46,7 +46,7 @@ describe('lib/config', () => {
         });
 
         it('should accept query given as object', () => {
-            const config = new Config({query: {foo: 'bar'}}, {}, 'gemini');
+            const config = new Config({query: {foo: 'bar'}}, {});
 
             const query = config.getQueryForBrowser('some-browser');
 
@@ -56,21 +56,10 @@ describe('lib/config', () => {
     });
 
     describe('parse query parameters from environment variables', () => {
-        it('should use "GEMINI_URL_QUERY" prefixed parameters', () => {
-            const config = new Config({query: []}, {
-                GEMINI_URL_QUERY_FOO: 'bar'
-            }, 'gemini');
-
-            const query = config.getQueryForBrowser('some-browser');
-
-            assert.lengthOf(query, 1);
-            assert.match(query[0], {name: 'foo', value: 'bar'});
-        });
-
         it('should use "HERMIONE_URL_QUERY" prefixed parameters', () => {
             const config = new Config({query: []}, {
                 HERMIONE_URL_QUERY_FOO: 'bar'
-            }, 'hermione');
+            });
 
             const query = config.getQueryForBrowser('some-browser');
 
@@ -82,7 +71,7 @@ describe('lib/config', () => {
             const config = new Config({query: []}, {
                 HERMIONE_URL_QUERY_FOO: 'bar',
                 SOME_ANOTHER_QUERY_PARAM: 'another-value'
-            }, 'hermione');
+            });
 
             const query = config.getQueryForBrowser('some-browser');
 
@@ -97,7 +86,7 @@ describe('lib/config', () => {
                 }
             ]}, {
                 HERMIONE_URL_QUERY_BAR: 'bar value'
-            }, 'hermione');
+            });
 
             const query = config.getQueryForBrowser('some-browser');
 
@@ -114,7 +103,7 @@ describe('lib/config', () => {
                 }
             ]}, {
                 HERMIONE_URL_QUERY_FOO: 'another foo value'
-            }, 'hermione');
+            });
 
             const query = config.getQueryForBrowser('some-browser');
 
@@ -126,7 +115,7 @@ describe('lib/config', () => {
         it('should apply query parameters from env variable for all browsers', () => {
             const config = new Config({query: []}, {
                 HERMIONE_URL_QUERY_FOO: 'bar'
-            }, 'hermione');
+            });
 
             const query = config.getQueryForBrowser('some-browser');
 
@@ -136,7 +125,7 @@ describe('lib/config', () => {
         it('should use "concat" mode for query parameter from env variable', () => {
             const config = new Config({query: []}, {
                 HERMIONE_URL_QUERY_FOO: 'bar'
-            }, 'hermione');
+            });
 
             const query = config.getQueryForBrowser('some-browser');
 
@@ -146,7 +135,7 @@ describe('lib/config', () => {
         it('should parse extra queries from env', () => {
             const config = new Config({query: []}, {
                 HERMIONE_URL_CUSTOM_QUERIES: 'foo-bar=baz;qux=baz=1'
-            }, 'hermione');
+            });
 
             const query = config.getQueryForBrowser('some-browser');
 
@@ -164,7 +153,7 @@ describe('lib/config', () => {
                         name: 'foo',
                         value: 'bar'
                     }
-                ]}, {}, 'gemini');
+                ]}, {});
 
                 const query = config.getQueryForBrowser('some-browser');
 
@@ -178,7 +167,7 @@ describe('lib/config', () => {
                         value: 'bar',
                         browsers: 'bro1'
                     }
-                ]}, {}, 'gemini');
+                ]}, {});
 
                 const query = config.getQueryForBrowser('bro1');
 
@@ -193,7 +182,7 @@ describe('lib/config', () => {
                         value: 'bar',
                         browsers: ['bro1', 'bro2']
                     }
-                ]}, {}, 'gemini');
+                ]}, {});
 
                 const query1 = config.getQueryForBrowser('bro1');
                 const query2 = config.getQueryForBrowser('bro2');
@@ -211,7 +200,7 @@ describe('lib/config', () => {
                         value: 'bar',
                         browsers: /bro1/
                     }
-                ]}, {}, 'gemini');
+                ]}, {});
 
                 const query = config.getQueryForBrowser('bro1');
 
@@ -226,7 +215,7 @@ describe('lib/config', () => {
                         value: 'bar',
                         browsers: [/bro1/, /bro2/]
                     }
-                ]}, {}, 'gemini');
+                ]}, {});
 
                 const query1 = config.getQueryForBrowser('bro1');
                 const query2 = config.getQueryForBrowser('bro2');
@@ -244,7 +233,7 @@ describe('lib/config', () => {
                         value: 'bar',
                         browsers: ['bro1', /bro2/]
                     }
-                ]}, {}, 'gemini');
+                ]}, {});
 
                 const query1 = config.getQueryForBrowser('bro1');
                 const query2 = config.getQueryForBrowser('bro2');
