@@ -9,7 +9,7 @@ module.exports = (hermione, options) => {
         return;
     }
 
-    const config = new Config(options.url, process.env, 'hermione');
+    const config = new Config(options.url, process.env);
 
     hermione.on(hermione.events.NEW_BROWSER, (session, meta) => {
         meta = meta || {};
