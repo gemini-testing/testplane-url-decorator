@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="4.0.0"></a>
+# [4.0.0](https://github.com/gemini-testing/url-decorator/compare/v3.0.0...v4.0.0) (2022-12-02)
+
+
+### Features
+
+* remove gemini support ([ec9aa1b](https://github.com/gemini-testing/url-decorator/commit/ec9aa1b))
+
+
+### BREAKING CHANGES
+
+* drop gemini support
+
+
+
 <a name="3.0.0"></a>
 # [3.0.0](https://github.com/gemini-testing/url-decorator/compare/v2.1.2...v3.0.0) (2022-04-21)
 
