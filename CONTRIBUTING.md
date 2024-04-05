@@ -7,7 +7,7 @@ New contributions are welcomed. Follow this guide if you want to make one.
 Follow [Github guide](https://help.github.com/articles/creating-a-pull-request) to fork a repo
 and create a pull request.
 
-All bug fixes and new features should go to the [`master`](https://github.com/gemini-testing/url-decorator/tree/master) branch.
+All bug fixes and new features should go to the [`master`](https://github.com/gemini-testing/testplane-url-decorator/tree/master) branch.
 
 ## Commit messages
 
@@ -42,7 +42,7 @@ npm run cover
 
 When submitting an issue please do following:
 
-1. [Search](https://github.com/gemini-testing/url-decorator/issues) for same issues on github in order to prevent duplicates
+1. [Search](https://github.com/gemini-testing/testplane-url-decorator/issues) for same issues on github in order to prevent duplicates
 2. Provide the most detailed issue description so we will additional info to work with
 
 Note that if no response for contributors questions will be provided in 1 week then issue may be considered as irrelevant/resolved and may be closed.

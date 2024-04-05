@@ -1,13 +1,13 @@
 {
-  "name": "url-decorator",
-  "version": "4.0.0",
-  "description": "Plugin for hermione which is intended to add additional parameters to test urls",
+  "name": "@testplane/url-decorator",
+  "version": "0.0.1",
+  "description": "Plugin for Testplane which is intended to add additional parameters to test urls",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/gemini-testing/url-decorator.git"
+    "url": "https://github.com/gemini-testing/testplane-url-decorator.git"
   },
-  "bugs": "https://github.com/gemini-testing/url-decorator/issues",
+  "bugs": "https://github.com/gemini-testing/testplane-url-decorator/issues",
   "scripts": {
     "lint": "eslint .",
     "test": "npm run lint && npm run test-unit",
@@ -22,6 +22,7 @@
     "node": ">= 4"
   },
   "keywords": [
+    "testplane",
     "hermione",
     "plugin",
     "url-decorator"

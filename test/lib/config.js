@@ -56,9 +56,9 @@ describe('lib/config', () => {
     });
 
     describe('parse query parameters from environment variables', () => {
-        it('should use "HERMIONE_URL_QUERY" prefixed parameters', () => {
+        it('should use "TESTPLANE_URL_QUERY" prefixed parameters', () => {
             const config = new Config({query: []}, {
-                HERMIONE_URL_QUERY_FOO: 'bar'
+                TESTPLANE_URL_QUERY_FOO: 'bar'
             });
 
             const query = config.getQueryForBrowser('some-browser');
@@ -69,7 +69,7 @@ describe('lib/config', () => {
 
         it('should not use another environment parameters', () => {
             const config = new Config({query: []}, {
-                HERMIONE_URL_QUERY_FOO: 'bar',
+                TESTPLANE_URL_QUERY_FOO: 'bar',
                 SOME_ANOTHER_QUERY_PARAM: 'another-value'
             });
 
@@ -85,7 +85,7 @@ describe('lib/config', () => {
                     value: 'foo value'
                 }
             ]}, {
-                HERMIONE_URL_QUERY_BAR: 'bar value'
+                TESTPLANE_URL_QUERY_BAR: 'bar value'
             });
 
             const query = config.getQueryForBrowser('some-browser');
@@ -102,7 +102,7 @@ describe('lib/config', () => {
                     value: 'foo value'
                 }
             ]}, {
-                HERMIONE_URL_QUERY_FOO: 'another foo value'
+                TESTPLANE_URL_QUERY_FOO: 'another foo value'
             });
 
             const query = config.getQueryForBrowser('some-browser');
@@ -114,7 +114,7 @@ describe('lib/config', () => {
 
         it('should apply query parameters from env variable for all browsers', () => {
             const config = new Config({query: []}, {
-                HERMIONE_URL_QUERY_FOO: 'bar'
+                TESTPLANE_URL_QUERY_FOO: 'bar'
             });
 
             const query = config.getQueryForBrowser('some-browser');
@@ -124,7 +124,7 @@ describe('lib/config', () => {
 
         it('should use "concat" mode for query parameter from env variable', () => {
             const config = new Config({query: []}, {
-                HERMIONE_URL_QUERY_FOO: 'bar'
+                TESTPLANE_URL_QUERY_FOO: 'bar'
             });
 
             const query = config.getQueryForBrowser('some-browser');
@@ -134,7 +134,7 @@ describe('lib/config', () => {
 
         it('should parse extra queries from env', () => {
             const config = new Config({query: []}, {
-                HERMIONE_URL_CUSTOM_QUERIES: 'foo-bar=baz;qux=baz=1'
+                TESTPLANE_URL_CUSTOM_QUERIES: 'foo-bar=baz;qux=baz=1'
             });
 
             const query = config.getQueryForBrowser('some-browser');

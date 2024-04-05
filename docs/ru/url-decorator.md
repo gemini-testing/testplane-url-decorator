@@ -1,23 +1,23 @@
-# url-decorator
+# @testplane/url-decorator
 
 ## Обзор
 
-Используйте плагин `url-decorator`, чтобы автоматически дополнять урлы в hermione-тестах нужными query-параметрами.
+Используйте плагин `@testplane/url-decorator`, чтобы автоматически дополнять урлы в testplane-тестах нужными query-параметрами.
 
 ## Установка
 
 ```bash
-npm install -D url-decorator
+npm install -D @testplane/url-decorator
 ```
 
 ## Настройка
 
-Необходимо подключить плагин в разделе `plugins` конфига `hermione`:
+Необходимо подключить плагин в разделе `plugins` конфига `testplane`:
 
 ```javascript
 module.exports = {
     plugins: {
-        'url-decorator': {
+        '@testplane/url-decorator': {
             enabled: true,
             url: {
                 query: [
@@ -31,10 +31,10 @@ module.exports = {
             }
         },
 
-        // другие плагины гермионы...
+        // другие плагины testplane...
     },
 
-    // другие настройки гермионы...
+    // другие настройки testplane...
 };
 ```
 
@@ -58,7 +58,7 @@ module.exports = {
 ```javascript
 module.exports = {
     plugins: {
-        'url-decorator': {
+        '@testplane/url-decorator': {
             enabled: true,
             url: {
                 query: [
@@ -80,10 +80,10 @@ module.exports = {
             }
         },
 
-        // другие плагины гермионы...
+        // другие плагины testplane...
     },
 
-    // другие настройки гермионы...
+    // другие настройки testplane...
 };
 ```
 
@@ -92,7 +92,7 @@ module.exports = {
 ```javascript
 module.exports = {
     plugins: {
-        'url-decorator': {
+        '@testplane/url-decorator': {
             enabled: true,
             url: {
                 query: {
@@ -112,10 +112,10 @@ module.exports = {
             },
         },
 
-        // другие плагины гермионы...
+        // другие плагины testplane...
     },
 
-    // другие настройки гермионы...
+    // другие настройки testplane...
 };
 ```
 
@@ -260,32 +260,32 @@ url: {
 
 ### Передача параметров через CLI
 
-#### HERMIONE_URL_QUERY_*
+#### TESTPLANE_URL_QUERY_*
 
 Чтобы передать дополнительные query-параметры, можно воспользоваться переменными окружения следующего вида:
 
 ```bash
-HERMIONE_URL_QUERY_<имя query-параметра>
+TESTPLANE_URL_QUERY_<имя query-параметра>
 ```
 
-Например, в вашем тесте открывается урл `http://localhost/test/?tool=hermione`, а вы хотите добавить к урлу query-параметр `text` со значением `ololo` с помощью переменной окружения:
+Например, в вашем тесте открывается урл `http://localhost/test/?tool=testplane`, а вы хотите добавить к урлу query-параметр `text` со значением `ololo` с помощью переменной окружения:
 
 ```bash
-HERMIONE_URL_QUERY_TEXT=ololo hermione ...
+TESTPLANE_URL_QUERY_TEXT=ololo testplane ...
 ```
 
-После этого в вашем тесте будет открываться урл вида: `http://localhost/test/?tool=hermione&text=ololo`.
+После этого в вашем тесте будет открываться урл вида: `http://localhost/test/?tool=testplane&text=ololo`.
 
-#### HERMIONE_URL_CUSTOM_QUERIES
+#### TESTPLANE_URL_CUSTOM_QUERIES
 
-Если среди ваших query-параметров есть параметры, которые нельзя выразить в виде переменной окружения (например, `foo-bar`), то вы можете добавить эти параметры через переменную окружения `HERMIONE_URL_CUSTOM_QUERIES`.
+Если среди ваших query-параметров есть параметры, которые нельзя выразить в виде переменной окружения (например, `foo-bar`), то вы можете добавить эти параметры через переменную окружения `TESTPLANE_URL_CUSTOM_QUERIES`.
 
 В качестве значения используйте строку вида `<query-param-1>=<value-1>;<query-param-2>=<value-2>;`.
 
 Например:
 
 ```bash
-HERMIONE_URL_CUSTOM_QUERIES='foo-bar=baz;qux=1' hermione ...
+TESTPLANE_URL_CUSTOM_QUERIES='foo-bar=baz;qux=1' testplane ...
 ```
 
 Тогда в вашем тесте будет открываться урл вида: `http://localhost/test/?foo-bar=baz&qux=1`.
