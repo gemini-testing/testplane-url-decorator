@@ -1,6 +1,6 @@
 {
   "name": "@testplane/url-decorator",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Plugin for Testplane which is intended to add additional parameters to test urls",
   "main": "index.js",
   "repository": {
