@@ -4,21 +4,21 @@ const _ = require('lodash');
 const Config = require('./lib/config');
 const updateUrl = require('./lib/url-updater').updateUrl;
 
-module.exports = (hermione, options) => {
+module.exports = (testplane, options) => {
     if (!_.isObject(options) || options.enabled === false) {
         return;
     }
 
     const config = new Config(options.url, process.env);
 
-    hermione.on(hermione.events.NEW_BROWSER, (session, meta) => {
+    testplane.on(testplane.events.NEW_BROWSER, (session, meta) => {
         meta = meta || {};
         decorateUrl(session, config.getQueryForBrowser(meta.browserId));
     });
 };
 
 /**
- * Decorates hermione browser url
+ * Decorates testplane browser url
  * @param {Object} session instance
  * @param {Object} query
  */

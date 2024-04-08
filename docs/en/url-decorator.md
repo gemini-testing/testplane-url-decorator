@@ -1,23 +1,23 @@
-# url-decorator
+# @testplane/url-decorator
 
 ## Overview
 
-Use the `url-decorator` plugin to automatically add the necessary query parameters to the urls in hermione tests.
+Use the `@testplane/url-decorator` plugin to automatically add the necessary query parameters to the urls in testplane tests.
 
 ## Install
 
 ```bash
-npm install -D url-decorator
+npm install -D @testplane/url-decorator
 ```
 
 ## Setup
 
-Add the plugin to the `plugins` section of the `hermione` config:
+Add the plugin to the `plugins` section of the `testplane` config:
 
 ```javascript
 module.exports = {
     plugins: {
-        'url-decorator': {
+        '@testplane/url-decorator': {
             enabled: true,
             url: {
                 query: [
@@ -31,10 +31,10 @@ module.exports = {
             }
         },
 
-        // other hermione plugins...
+        // other testplane plugins...
     },
 
-    // other hermione settings...
+    // other testplane settings...
 };
 ```
 
@@ -58,7 +58,7 @@ The `url` parameter is an object with a `query` field, the value of which can be
 ```javascript
 module.exports = {
     plugins: {
-        'url-decorator': {
+        '@testplane/url-decorator': {
             enabled: true,
             url: {
                 query: [
@@ -80,10 +80,10 @@ module.exports = {
             }
         },
 
-        // other hermione plugins...
+        // other testplane plugins...
     },
 
-    // other hermione settings...
+    // other testplane settings...
 };
 ```
 
@@ -92,7 +92,7 @@ module.exports = {
 ```javascript
 module.exports = {
     plugins: {
-        'url-decorator': {
+        '@testplane/url-decorator': {
             enabled: true,
             url: {
                 query: {
@@ -112,10 +112,10 @@ module.exports = {
             },
         },
 
-        // other hermione plugins...
+        // other testplane plugins...
     },
 
-    // other hermione settings...
+    // other testplane settings...
 };
 ```
 
@@ -260,32 +260,32 @@ url: {
 
 ### Passing parameters via the CLI
 
-#### HERMIONE_URL_QUERY_*
+#### TESTPLANE_URL_QUERY_*
 
 To pass additional query parameters, you can use environment variables of the following type:
 
 ```bash
-HERMIONE_URL_QUERY_<query parameter name>
+TESTPLANE_URL_QUERY_<query parameter name>
 ```
 
-For example, your test opens the url `http://localhost/test/?tool=hermione`, and you want to add the query parameter `text` with the value `ololo` to the url using the environment variable:
+For example, your test opens the url `http://localhost/test/?tool=testplane`, and you want to add the query parameter `text` with the value `ololo` to the url using the environment variable:
 
 ```bash
-HERMIONE_URL_QUERY_TEXT=ololo hermione ...
+TESTPLANE_URL_QUERY_TEXT=ololo testplane ...
 ```
 
-After that, your test will open the url of the following form: `http://localhost/test/?tool=hermione&text=ololo`.
+After that, your test will open the url of the following form: `http://localhost/test/?tool=testplane&text=ololo`.
 
-#### HERMIONE_URL_CUSTOM_QUERIES
+#### TESTPLANE_URL_CUSTOM_QUERIES
 
-If there are parameters among your query parameters that cannot be expressed as an environment variable (for example, `foo-bar`), then you can add these parameters via the environment variable `HERMIONE_URL_CUSTOM_QUERIES`.
+If there are parameters among your query parameters that cannot be expressed as an environment variable (for example, `foo-bar`), then you can add these parameters via the environment variable `TESTPLANE_URL_CUSTOM_QUERIES`.
 
 As a value, use a string of the form `<query-param-1>=<value-1>;<query-param-2>=<value-2>;`.
 
 For example:
 
 ```bash
-HERMIONE_URL_CUSTOM_QUERIES='foo-bar=baz;qux=1' hermione ...
+TESTPLANE_URL_CUSTOM_QUERIES='foo-bar=baz;qux=1' testplane ...
 ```
 
 Then your test will open the url of the following form: `http://localhost/test/?foo-bar=baz&qux=1`.

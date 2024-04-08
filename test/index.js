@@ -5,7 +5,7 @@ const EventEmitter = require('events').EventEmitter;
 const urlUpdater = require('../lib/url-updater');
 const plugin = require('..');
 
-const mkHermione_ = () => {
+const mkTestplane_ = () => {
     const emitter = new EventEmitter();
     emitter.events = {
         NEW_BROWSER: 'newBrowser'
@@ -14,10 +14,10 @@ const mkHermione_ = () => {
     return emitter;
 };
 
-describe('url-decorator', () => {
+describe('@testplane/url-decorator', () => {
     const sandbox = sinon.sandbox.create();
 
-    let hermione;
+    let testplane;
 
     const mkBrowser = () => {
         const browser = {};
@@ -33,8 +33,8 @@ describe('url-decorator', () => {
     };
 
     beforeEach(() => {
-        hermione = mkHermione_();
-        sandbox.spy(hermione, 'on');
+        testplane = mkTestplane_();
+        sandbox.spy(testplane, 'on');
 
         sandbox.stub(urlUpdater, 'updateUrl');
     });
@@ -42,24 +42,24 @@ describe('url-decorator', () => {
     afterEach(() => sandbox.restore());
 
     it('should do nothing if "opts" is not an object', () => {
-        plugin(hermione, null);
+        plugin(testplane, null);
 
-        assert.notCalled(hermione.on);
+        assert.notCalled(testplane.on);
     });
 
     it('should do nothing if plugin is disabled', () => {
-        plugin(hermione, {enabled: false});
+        plugin(testplane, {enabled: false});
 
-        assert.notCalled(hermione.on);
+        assert.notCalled(testplane.on);
     });
 
     it('should not decorate if it was called without parameters', () => {
         const browser = mkBrowser();
         const baseUrlFn = browser.url;
 
-        plugin(hermione, {});
+        plugin(testplane, {});
 
-        hermione.emit(hermione.events.NEW_BROWSER, browser, {});
+        testplane.emit(testplane.events.NEW_BROWSER, browser, {});
 
         browser.url();
 
@@ -70,7 +70,7 @@ describe('url-decorator', () => {
         const browser = mkBrowser();
         const baseUrlFn = browser.url;
 
-        plugin(hermione, {
+        plugin(testplane, {
             url: {
                 query: [
                     {
@@ -81,7 +81,7 @@ describe('url-decorator', () => {
             }
         });
 
-        hermione.emit(hermione.events.NEW_BROWSER, browser, {});
+        testplane.emit(testplane.events.NEW_BROWSER, browser, {});
 
         browser.url('/?text=text');
 
@@ -92,7 +92,7 @@ describe('url-decorator', () => {
         const browser = mkBrowser();
         const baseUrlFn = browser.url;
 
-        plugin(hermione, {
+        plugin(testplane, {
             url: {
                 query: [
                     {
@@ -109,7 +109,7 @@ describe('url-decorator', () => {
             }
         });
 
-        hermione.emit(hermione.events.NEW_BROWSER, browser, {browserId: 'foo-bro'});
+        testplane.emit(testplane.events.NEW_BROWSER, browser, {browserId: 'foo-bro'});
 
         browser.url('/?text=text');
 
